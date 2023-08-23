@@ -1,23 +1,91 @@
 gerenciador_Telas:
     TelaInicial:
+    CadastrarNovaFace:
+    FacesCadastradas:
+
+
 <TelaInicial>
     name:'tela_inicial'
-
     MDLabel:
-        text: "Cadastro de faces"
+        text: "Reconhecimento Facial"
         pos_hint: { "center_y": 0.9}
         halign: "center"
+        font_name:"fonts/Letterland.otf"
+        font_size:'45sp'
+        theme_text_color: "Custom"
+        text_color: 'black'
 
-    MDRectangleFlatButton:
+    MDRoundFlatButton:
         text: "Cadrastar nova face"
         pos_hint: {"center_x": 0.5, "center_y": 0.75}
         theme_text_color: "Custom"
-        text_color: "white"
-        line_color: "red"
-    MDRectangleFlatButton:
+        text_color: "black"
+        line_color: "black"
+        on_release:
+            root.manager.transition.direction="left"
+            app.root.current = "cadastrar_face"
+
+
+
+    MDRoundFlatButton:
         text: "Faces cadastradas"
         pos_hint: {"center_x": 0.5, "center_y": 0.5}
-
-    MDRectangleFlatButton:
+        theme_text_color: "Custom"
+        text_color: "black"
+        line_color: "black"
+        on_release:
+            root.manager.transition.direction="left"
+            app.root.current = "faces_cadastradas"
+    MDRoundFlatButton:
         text: "Abrir Webcam"
         pos_hint: {"center_x": 0.5, "center_y": 0.25}
+        theme_text_color: "Custom"
+        text_color: "black"
+        line_color: "black"
+
+
+<CadastrarNovaFace>
+    name:'cadastrar_face'
+
+
+    MDIconButton:
+        icon: "arrow-left-bold"
+        pos_hint: {"center_x": .1, "center_y": .95}
+        on_release:
+            app.root.current = "tela_inicial"
+            root.manager.transition.direction="right"
+
+
+    MDTextField:
+        id: nome_rosto
+        hint_text:"Nome do rosto"
+        size_hint_x:0.8
+        pos_hint: {'center_x': .5,'center_y': .8}
+
+    MDRaisedButton:
+        text: 'Procurar foto'
+        pos_hint:{'center_x': 0.5, 'center_y': 0.5}
+        on_release:root.explorador_arquivos()
+
+<FacesCadastradas>
+    name: 'faces_cadastradas'
+
+    MDIconButton:
+        icon: "arrow-left-bold"
+        pos_hint: {"center_x": .1, "center_y": .95}
+        on_release:
+            app.root.current = "tela_inicial"
+            root.manager.transition.direction="right"
+
+    MDScrollView:
+        size_hint:0.5,1
+        pos_hint: {"center_x": .5, "center_y": .5}
+
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_y: None
+            spacing: 30
+            padding: 10
+            height: self.minimum_height
+            id:lista
+
