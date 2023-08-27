@@ -36,13 +36,14 @@ gerenciador_Telas:
         on_release:
             root.manager.transition.direction="left"
             app.root.current = "faces_cadastradas"
+
     MDRoundFlatButton:
         text: "Abrir Webcam"
         pos_hint: {"center_x": 0.5, "center_y": 0.25}
         theme_text_color: "Custom"
         text_color: "black"
         line_color: "black"
-
+        on_release: root.abrir_camera()
 
 <CadastrarNovaFace>
     name:'cadastrar_face'

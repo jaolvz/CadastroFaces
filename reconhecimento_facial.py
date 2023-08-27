@@ -92,6 +92,23 @@ def verificar_existencia_do_nome(nome_Rosto):
     return False
 
 
+def buscar_pessoa_por_encode(encode_Rosto):
+    try:
+        with open("encodes.pkl", "rb") as arquivo:
+            dados_existentes = pickle.load(arquivo)
+    except FileNotFoundError:
+        dados_existentes = []
+
+
+
+    for item in dados_existentes:
+        encode_cadastrado = item['encode']
+        comparacao = fr.compare_faces(encode_cadastrado, encode_Rosto)
+        if comparacao[0]:
+            return item['nome'], item['encode']
+
+    return "Rosto desconhecido", "0"
+
 def buscar_todos_nomes():
     try:
         with open("encodes.pkl", "rb") as arquivo:
@@ -103,3 +120,52 @@ def buscar_todos_nomes():
        nomes_cadastrados.append(item['nome'])
 
     return nomes_cadastrados
+
+
+def abrir_camera():
+    import cv2
+    import pickle
+    import face_recognition as fr
+
+    # Carregar os dados de encodes e nomes do arquivo pkl
+    with open('encodes.pkl', 'rb') as f:
+        dados = pickle.load(f)
+
+    encodes = [item['encode'] for item in dados]
+    nomes = [item['nome'] for item in dados]
+
+    # Inicializar a câmera
+    camera = cv2.VideoCapture(0)
+
+    while True:
+        ret, frame = camera.read()
+
+        #buscando
+        face_loc = fr.face_locations(frame)
+        face_encode= fr.face_encodings(frame, face_loc)
+
+
+        for face_location, face_encoding in zip(face_loc,face_encode):
+
+            matches = fr.compare_faces(encodes, face_encoding)
+
+            nome = "Desconhecido"
+
+
+            if True in matches: #se for verdadeiro, assumo um index para usar dentro da lista nomes
+                matched_idx = matches.index(True)
+                nome= nomes[matched_idx]
+
+            top, right, bottom, left = face_location
+
+
+            cv2.putText(frame, nome (left, bottom + 25), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 255, 0), 2)
+
+        cv2.imshow('Camera (Para finalizar, aperte a letra Q)', frame)
+
+        if cv2.waitKey(1) & 0xFF == ord("q"):
+            break
+
+    # Liberar recursos
+    camera.release()
+    cv2.destroyAllWindows()

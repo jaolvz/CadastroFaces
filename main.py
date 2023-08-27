@@ -6,10 +6,10 @@ import reconhecimento_facial as rf
 from kivymd.uix.snackbar import Snackbar
 from kivymd.uix.imagelist import MDSmartTile
 from kivymd.uix.label import MDLabel
-from kivymd.uix.button import MDIconButton
 
 class TelaInicial(Screen):
-    pass
+    def abrir_camera(self):
+        rf.abrir_camera()
 
 class FacesCadastradas(Screen):
     def on_enter(self, *args):
